@@ -8,7 +8,15 @@ MAINTAINER Kevin Delfour <kevin@delfour.eu>
 # ------------------------------------------------------------------------------
 # Install base
 RUN apt-get update
-RUN apt-get install -y build-essential g++ curl libssl-dev apache2-utils git libxml2-dev sshfs
+RUN apt-get install -y build-essential g++ curl libssl-dev apache2-utils git libxml2-dev sshfs wget
+
+# ------------------------------------------------------------------------------
+# Install elixir
+RUN touch /etc/init.d/couchdb
+RUN apt-get remove -y couchdb
+RUN wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
+RUN apt-get update
+RUN apt-get install -y elixir
 
 # ------------------------------------------------------------------------------
 # Install Node.js
@@ -20,6 +28,7 @@ RUN apt-get install -y nodejs
 RUN git clone https://github.com/c9/core.git /cloud9
 WORKDIR /cloud9
 RUN scripts/install-sdk.sh
+
 
 # Tweak standlone.js conf
 RUN sed -i -e 's_127.0.0.1_0.0.0.0_g' /cloud9/configs/standalone.js 
